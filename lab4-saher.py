@@ -444,6 +444,13 @@ if __name__ == "__main__":
     print "TP=", tp
     print "FP=", fp
     print "FN=", fn
+
+    precision = float(tp) / (tp+fp)
+    recall = float(tp) / (tp + fn)
+    f1 = 2 * precision * recall / (precision + recall)
+    print 'PRECISION=%f' % precision
+    print 'RECALL=%f' % recall
+    print 'F1=%f' % f1
                                                 
     
     #matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
