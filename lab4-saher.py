@@ -57,6 +57,16 @@ class Venue():
             _v = re.sub(r'(Plz\.|Plz|Plaza)', 'Plz', _v)
             
             return _v
+
+        if k == 'website':
+            _v = v.lower()
+            _v = re.sub(r'(http://)', '', _v)
+            print _v
+            _v = re.sub(r'www\.', '', _v)
+            print _v
+            return _v 
+
+        
         return v    
 
 
@@ -170,8 +180,10 @@ class GenericMiner():
             delta_lat = abs(lat2 - lat1)
             delta_long = abs(long2 - long1)
 
-            if (delta_lat < 9e-06):
-                delLong_max = 1 * 360 * float(1/ math.cos(lat1*math.pi/180)) * float(1)/ 40075160
+            METERS_THRESHOLD = 20
+            meters = delta_lat *  40008000/float(360)
+            if (meters < METERS_THRESHOLD):
+                delLong_max = METERS_THRESHOLD * 360 * float(1/ math.cos(lat1*math.pi/180)) * float(1)/ 40075160
                 if delta_long < delLong_max:
                     vector.append(5)
                 else:
@@ -228,14 +240,9 @@ class GenericMiner():
         web1 = v1Map["website"].lower()
         web2 = v2Map["website"].lower()
         if web1 == web2:
-            vector.append(5)
-        elif web1[:7] == "http://" or web2[:7] == "http://":
-            if self.levenshtein_distance(web1, web2) == 7:
-                vector.append(4)
-            else: vector.append(0)
+            vector.append(5)       
         else:
             vector.append(-5)
-
 
         ##done
         return vector
@@ -251,6 +258,28 @@ class GenericMiner():
         if v1Map["phone"] == v2Map["phone"]:
             if v1Map["street_address"] == v2Map["street_address"]:
                 return True
+
+        lat1 = v1Map["latitude"]
+        lat2 = v2Map["latitude"]
+        long1= v1Map["longitude"]
+        long2= v2Map["longitude"]
+
+        if(lat1 is None or lat2 is None or long1 is None or long2 is None):
+            vector.append(0)
+        else:
+            delta_lat = abs(lat2 - lat1)
+            delta_long = abs(long2 - long1)
+
+            METERS_THRESHOLD = 20
+            meters = delta_lat *  40008000/float(360)
+            if (meters < METERS_THRESHOLD):
+                delLong_max = METERS_THRESHOLD * 360 * float(1/ math.cos(lat1*math.pi/180)) * float(1)/ 40075160
+                if delta_long < delLong_max:
+                    return True
+                else:
+                    return False
+            else: return False       
+                
         return False
             
 
@@ -401,9 +430,9 @@ class PerceptronMiner(GenericMiner):
                 if dp > 1 : #match
                     matches.append((id1, id2))
                 else:
-                    isFn = self.false_negative_check( venue1, venue2)
-                    if(isFn): matches.append((id1,id2))
-                    else: non_matches.append( (id1, id2))
+                    #isFn = self.false_negative_check( venue1, venue2)
+                    #if(isFn): matches.append((id1,id2))
+                    non_matches.append( (id1, id2))
 
         return matches, non_matches, result
 
@@ -446,13 +475,6 @@ if __name__ == "__main__":
     print "TP=", tp
     print "FP=", fp
     print "FN=", fn
-
-    precision = float(tp) / (tp+fp)
-    recall = float(tp) / (tp + fn)
-    f1 = 2 * precision * recall / (precision + recall)
-    print 'PRECISION=%f' % precision
-    print 'RECALL=%f' % recall
-    print 'F1=%f' % f1
                                                 
     
     #matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
