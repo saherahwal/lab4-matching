@@ -196,6 +196,8 @@ class GenericMiner():
         #phone
         ph1 = v1Map["phone"]
         ph2 = v2Map["phone"]
+#	if ph1 or ph2 == None:
+#	    vector.append(1)
         if ph1 == ph2: vector.append(5)
         else: vector.append(0)
 
@@ -438,7 +440,7 @@ if __name__ == "__main__":
     for n in non_matches:        
         if n[0] in res1_2:
             if n[1] == res1_2[n[0]]:
-                print "fn res", n
+                print n
                 fn += 1
 
     print "TP=", tp
