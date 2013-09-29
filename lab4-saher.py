@@ -55,6 +55,17 @@ class Venue():
             _v = re.sub(r'(Ave\.|Av\.|Av|Ave|Avenue)', 'Ave', _v)
             
             _v = re.sub(r'(Plz\.|Plz|Plaza)', 'Plz', _v)
+
+##            _v = re.sub(r'(One\.|One)', '1', _v)
+##            _v = re.sub(r'(Two\.|Two)', '2', _v)
+##            _v = re.sub(r'(Three\.|Plz)', '3', _v)
+##            _v = re.sub(r'(Four\.|Plz|Plaza)', '4', _v)
+##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '5', _v)
+##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '6', _v)
+##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '7', _v)
+##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '8', _v)
+##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '9', _v)
+            
             
             return _v
 
@@ -267,14 +278,15 @@ class GenericMiner():
             if v1Map["street_address"] == v2Map["street_address"]:
                 return True
 
+        
+
         lat1 = v1Map["latitude"]
         lat2 = v2Map["latitude"]
         long1= v1Map["longitude"]
         long2= v2Map["longitude"]
 
-        if(lat1 is None or lat2 is None or long1 is None or long2 is None):
-            vector.append(0)
-        else:
+
+        if(lat1 is not None and lat2 is not None and long2 is not None and long2 is not None):
             delta_lat = abs(lat2 - lat1)
             delta_long = abs(long2 - long1)
 
@@ -286,8 +298,11 @@ class GenericMiner():
                     return True
                 else:
                     return False
-            else: return False       
-                
+            else: return False
+        else:
+            return False
+
+                        
         return False
             
 
@@ -403,7 +418,6 @@ class PerceptronMiner(GenericMiner):
         return None        
                 
         
-
     
     def train(self, tr1, tr2, answers):
         """
@@ -438,9 +452,9 @@ class PerceptronMiner(GenericMiner):
                 if dp > 1 : #match
                     matches.append((id1, id2))
                 else:
-                    #isFn = self.false_negative_check( venue1, venue2)
-                    #if(isFn): matches.append((id1,id2))
-                    non_matches.append( (id1, id2))
+                    isFn = self.false_negative_check( venue1, venue2)
+                    if(isFn): matches.append((id1,id2))
+                    else: non_matches.append( (id1, id2))
 
         return matches, non_matches, result
 
