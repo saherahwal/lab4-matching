@@ -30,29 +30,29 @@ class Venue():
 ##            return v
             _v = string.capwords(v)
             
-            _v = re.sub(r'(W\.|West|W )', 'West ', _v)
+            _v = re.sub(r'(W\.|West|W )', 'W ', _v)
             
-            _v = re.sub(r'(E\.|East|E )', 'East ', _v)
+            _v = re.sub(r'(E\.|East|E )', 'E ', _v)
 
-            _v = re.sub(r'(S\.|South|S )', 'South ', _v)
+            _v = re.sub(r'(S\.|South|S )', 'S ', _v)
 
-            _v = re.sub(r'(N\.|North|N )', 'North ', _v)
+            _v = re.sub(r'(N\.|North|N )', 'N ', _v)
             
-            _v = re.sub(r'(Ne\.|Northeast|Ne )', 'NorthEast ', _v)
+            _v = re.sub(r'(Ne\.|Northeast|Ne )', 'NE ', _v)
             
-            _v = re.sub(r'(Se\.|Southeast|Se )', 'Southeast ', _v)
+            _v = re.sub(r'(Se\.|Southeast|Se )', 'SE ', _v)
             
             _v = re.sub(r'(Blvd\.|Boulevard|Blvd)', 'Blvd', _v)
             
-            _v = re.sub(r'(Aly\.|Aly|Alley)', 'Alley', _v)
+            _v = re.sub(r'(Aly\.|Aly|Alley)', 'Aly', _v)
             
-            _v = re.sub(r'(Sq\.|Sq|Square)', 'Square', _v)
+            _v = re.sub(r'(Sq\.|Sq|Square)', 'Sq', _v)
             
-            _v = re.sub(r'(St\.|Street|St)', 'Street', _v)
+            _v = re.sub(r'(St\.|Street|St)', 'St', _v)
             
-            _v = re.sub(r'(Place\.|Pl |Place)', 'Place ', _v)
+            _v = re.sub(r'(Place\.|Pl |Place)', 'Pl ', _v)
             
-            _v = re.sub(r'(Ave\.|Av\.|Av|Ave|Avenue)', 'Avenue', _v)
+            _v = re.sub(r'(Ave\.|Av\.|Av|Ave|Avenue)', 'Ave', _v)
             
             _v = re.sub(r'(Plz\.|Plz|Plaza)', 'Plz', _v)
             
@@ -60,10 +60,8 @@ class Venue():
 
         if k == 'website':
             _v = v.lower()
-            _v = re.sub(r'(http://)', '', _v)
-            print _v
-            _v = re.sub(r'www\.', '', _v)
-            print _v
+            _v = re.sub(r'(http://)', '', _v)           
+            _v = re.sub(r'www\.', '', _v)            
             return _v 
 
         
@@ -217,7 +215,7 @@ class GenericMiner():
         street_addr1 = v1Map["street_address"]
         street_addr2 = v2Map["street_address"]
 
-        if street_addr1 == street_addr2:
+        if self.levenshtein_distance(street_addr1,street_addr2) < 4:
             if zip1 == zip2:
                 vector.append(5)
             elif zip1 == None or zip2 == None:
@@ -289,7 +287,7 @@ class GenericMiner():
         if len(st1) > len(st2):
             return self.levenshtein_distance(st2, st1)
 
-        if len(st2) == 0: return len(s1)
+        if len(st2) == 0: return len(st2)
 
         prev_row = xrange(len(st2) + 1)
         for i, char1 in enumerate(st1):
@@ -475,7 +473,7 @@ if __name__ == "__main__":
     print "FN=", fn
                                                 
     
-    #matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
+##    matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
     with open("matches_test.csv", 'w') as f:
         f.write("locu_id" + "," + "foursquare_id" + "\n")
         for m in matches:
