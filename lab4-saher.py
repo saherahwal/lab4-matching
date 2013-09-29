@@ -350,6 +350,13 @@ class GenericMiner():
         return prev_row[-1]
 
 
+
+
+    def jaccard(self, str1, str2):
+        str1 = set(str1)
+        str2 = set(str2)          
+        c = str1.intersection(str2)
+        return 1 - (float(len(c)) / (len(str1) + len(str2) - len(c)))
         
 
 
@@ -446,8 +453,8 @@ class PerceptronMiner(GenericMiner):
             tr2: training set 2
             answers : matching answers in training set
         """
-        miters = 15 ## max iterations
-        lrate = 0.91 ## learning rate
+        miters = 8 ## max iterations
+        lrate = 0.75 ## learning rate
 
         self.train_with_miters_lrate(tr1, tr2, answers, miters, lrate)
 
