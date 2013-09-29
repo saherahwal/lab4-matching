@@ -56,15 +56,15 @@ class Venue():
             
             _v = re.sub(r'(Plz\.|Plz|Plaza)', 'Plz', _v)
 
-##            _v = re.sub(r'(One\.|One)', '1', _v)
-##            _v = re.sub(r'(Two\.|Two)', '2', _v)
-##            _v = re.sub(r'(Three\.|Plz)', '3', _v)
-##            _v = re.sub(r'(Four\.|Plz|Plaza)', '4', _v)
-##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '5', _v)
-##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '6', _v)
-##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '7', _v)
-##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '8', _v)
-##            _v = re.sub(r'(Plz\.|Plz|Plaza)', '9', _v)
+            _v = re.sub(r'(One\.|One)', '1', _v)
+            _v = re.sub(r'(Two\.|Two)', '2', _v)
+            _v = re.sub(r'(Three\.|Three)', '3', _v)
+            _v = re.sub(r'(Four\.|Four)', '4', _v)
+            _v = re.sub(r'(Five\.|Five)', '5', _v)
+            _v = re.sub(r'(Six\.|Six)', '6', _v)
+            _v = re.sub(r'(Seven\.|Seven)', '7', _v)
+            _v = re.sub(r'(Eight\.|Eight)', '8', _v)
+            _v = re.sub(r'(Nine\.|Nine)', '9', _v)
             
             
             return _v
@@ -274,10 +274,27 @@ class GenericMiner():
         v1Map = venue1.keyValMap
         v2Map = venue2.keyValMap
         match = False
-        if v1Map["phone"] == v2Map["phone"]:
-            if v1Map["street_address"] == v2Map["street_address"]:
-                return True
 
+        if v1Map["phone"] is not None and v1Map["phone"] != "":
+            if v1Map["phone"] == v2Map["phone"]:
+                if v1Map["street_address"] is not None and v1Map["street_address"] != "":
+                    if v1Map["street_address"] == v2Map["street_address"]:
+                        return True
+                else: return False
+            else: return False
+        else:
+            return False
+
+
+        if v1Map["phone"] is not None and v1Map["phone"] != "":
+            if v1Map["phone"] == v2Map["phone"]:
+                if v1Map["street_address"] is not None and v1Map["street_address"] != "":
+                    if v1Map["street_address"] == v2Map["street_address"]:
+                        return True
+                    else: return False
+                else: return False
+            else:
+                return False
         
 
         lat1 = v1Map["latitude"]
@@ -286,21 +303,21 @@ class GenericMiner():
         long2= v2Map["longitude"]
 
 
-        if(lat1 is not None and lat2 is not None and long2 is not None and long2 is not None):
-            delta_lat = abs(lat2 - lat1)
-            delta_long = abs(long2 - long1)
-
-            METERS_THRESHOLD = 20
-            meters = delta_lat *  40008000/float(360)
-            if (meters < METERS_THRESHOLD):
-                delLong_max = METERS_THRESHOLD * 360 * float(1/ math.cos(lat1*math.pi/180)) * float(1)/ 40075160
-                if delta_long < delLong_max:
-                    return True
-                else:
-                    return False
-            else: return False
-        else:
-            return False
+##        if(lat1 is not None and lat2 is not None and long2 is not None and long2 is not None):
+##            delta_lat = abs(lat2 - lat1)
+##            delta_long = abs(long2 - long1)
+##
+##            METERS_THRESHOLD = 20
+##            meters = delta_lat *  40008000/float(360)
+##            if (meters < METERS_THRESHOLD):
+##                delLong_max = METERS_THRESHOLD * 360 * float(1/ math.cos(lat1*math.pi/180)) * float(1)/ 40075160
+##                if delta_long < delLong_max:
+##                    return True
+##                else:
+##                    return False
+##            else: return False
+##        else:
+##            return False
 
                         
         return False
@@ -425,8 +442,8 @@ class PerceptronMiner(GenericMiner):
             tr2: training set 2
             answers : matching answers in training set
         """
-        miters = 8 ## max iterations
-        lrate = 0.75 ## learning rate
+        miters = 15 ## max iterations
+        lrate = 0.91 ## learning rate
 
         self.train_with_miters_lrate(tr1, tr2, answers, miters, lrate)
 
@@ -497,7 +514,13 @@ if __name__ == "__main__":
     print "TP=", tp
     print "FP=", fp
     print "FN=", fn
-                                                
+
+    recall = tp / (float(tp + fn))
+    precision = tp /(tp + float(fp))
+    print "recall:", recall
+    print "prec:", precision
+    print "f1Score:", 2*precision * recall / (float(recall+precision))
+                      
     
 ##    matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
     with open("matches_test.csv", 'w') as f:
