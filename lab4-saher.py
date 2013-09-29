@@ -61,9 +61,9 @@ class Venue():
         if k == 'website':
             _v = v.lower()
             _v = re.sub(r'(http://)', '', _v)
-            print _v
+            #print _v
             _v = re.sub(r'www\.', '', _v)
-            print _v
+           # print _v
             return _v 
 
         
@@ -240,7 +240,11 @@ class GenericMiner():
         web1 = v1Map["website"].lower()
         web2 = v2Map["website"].lower()
         if web1 == web2:
-            vector.append(5)       
+            vector.append(5) 
+	
+	elif web1 == None or web2 == None:
+	    vector.append(0)	
+      
         else:
             vector.append(-5)
 
@@ -475,7 +479,11 @@ if __name__ == "__main__":
     print "TP=", tp
     print "FP=", fp
     print "FN=", fn
-                                                
+    pr =  float(tp)/(tp+fp)
+    print "PRECISION=",pr
+    recall =  float(tp)/(tp+fn)   
+    print "RECALL=",recall                              
+    print "F1=",(2*pr*recall)/(pr+recall)
     
     #matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
     with open("matches_test.csv", 'w') as f:
