@@ -205,7 +205,7 @@ class GenericMiner():
         if loc1 == loc2:
             vector.append(1)
         else:
-            vector.append(0)
+            vector.append(-1)
 
         ## name:
         n1 = v1Map["name"].lower()
@@ -533,7 +533,7 @@ if __name__ == "__main__":
     print "f1Score:", 2*precision * recall / (float(recall+precision))
                       
     
-##    matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
+    #matches, non_matches, result = pMiner.classify_from_file("locu_test_hard.json", "foursquare_test_hard.json")
     with open("matches_test.csv", 'w') as f:
         f.write("locu_id" + "," + "foursquare_id" + "\n")
         for m in matches:
