@@ -215,15 +215,27 @@ class GenericMiner():
         street_addr1 = v1Map["street_address"]
         street_addr2 = v2Map["street_address"]
 
-        if self.levenshtein_distance(street_addr1,street_addr2) < 4:
+        if street_addr1 == street_addr2:
             if zip1 == zip2:
                 vector.append(5)
             elif zip1 == None or zip2 == None:
                 vector.append(1)
             else:
-                vector.append(-3)
+                vector.append(-4)
         else:
             vector.append(-5)
+            
+            
+        
+##        if self.levenshtein_distance(street_addr1,street_addr2) < 4:
+##            if zip1 == zip2:
+##                vector.append(5)
+##            elif zip1 == None or zip2 == None:
+##                vector.append(1)
+##            else:
+##                vector.append(-3)
+##        else:
+##            vector.append(-5)
 
         #region
         reg1 = v1Map["region"].lower()
