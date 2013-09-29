@@ -292,7 +292,7 @@ class GenericMiner():
 
 
         
-        return ((phoneEq and streetEq) or (phoneEq and nameEq))
+        return ((phoneEq and streetEq) or (phoneEq and nameEq) or (nameEq and phoneEq))
         
 
 ##        lat1 = v1Map["latitude"]
