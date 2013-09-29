@@ -444,9 +444,10 @@ class PerceptronMiner(GenericMiner):
                 if dp > 1 : #match
                     matches.append((id1, id2))
                 else:
-                    #isFn = self.false_negative_check( venue1, venue2)
-                    #if(isFn): matches.append((id1,id2))
-                    non_matches.append( (id1, id2))
+                    isFn = self.false_negative_check( venue1, venue2)
+                    if(isFn): matches.append((id1,id2))
+                    else:
+			non_matches.append( (id1, id2))
 
         return matches, non_matches, result
 
