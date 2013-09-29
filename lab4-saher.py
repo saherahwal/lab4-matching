@@ -411,7 +411,7 @@ class PerceptronMiner(GenericMiner):
             tr2: training set 2
             answers : matching answers in training set
         """
-        miters = 8  ## max iterations
+        miters = 8 ## max iterations
         lrate = 0.75 ## learning rate
 
         self.train_with_miters_lrate(tr1, tr2, answers, miters, lrate)
