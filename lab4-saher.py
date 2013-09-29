@@ -279,34 +279,32 @@ class GenericMiner():
         """
         v1Map = venue1.keyValMap
         v2Map = venue2.keyValMap
-        match = False
 
-        if v1Map["phone"] is not None and v1Map["phone"] != "":
-            if v1Map["phone"] == v2Map["phone"]:
-                if v1Map["street_address"] is not None and v1Map["street_address"] != "":
-                    if v1Map["street_address"] == v2Map["street_address"]:
-                        return True
-                else: return False
-            else: return False
-        else:
-            return False
-
-
-        if v1Map["phone"] is not None and v1Map["phone"] != "":
-            if v1Map["phone"] == v2Map["phone"]:
-                if v1Map["street_address"] is not None and v1Map["street_address"] != "":
-                    if v1Map["street_address"] == v2Map["street_address"]:
-                        return True
-                    else: return False
-                else: return False
-            else:
-                return False
+        phoneEq = False
+        streetEq = False
+        nameEq = False
         
 
-        lat1 = v1Map["latitude"]
-        lat2 = v2Map["latitude"]
-        long1= v1Map["longitude"]
-        long2= v2Map["longitude"]
+        if v1Map["phone"] is not None and v1Map["phone"] != "":
+            if v1Map["phone"] == v2Map["phone"]:
+                phoneEq = True
+        if v1Map["street_address"] is not None and v1Map["street_address"] != "":
+            if v1Map["street_address"] == v2Map["street_address"]:
+                streetEq = True 
+        
+        if v1Map["name"] is not None and v1Map["name"] != "":
+            if v1Map["name"] == v2Map["name"]:
+                nameEq = True
+
+
+        
+        return ((phoneEq and streetEq) or (phoneEq and nameEq))
+        
+
+##        lat1 = v1Map["latitude"]
+##        lat2 = v2Map["latitude"]
+##        long1= v1Map["longitude"]
+##        long2= v2Map["longitude"]
 
 
 ##        if(lat1 is not None and lat2 is not None and long2 is not None and long2 is not None):
@@ -326,7 +324,7 @@ class GenericMiner():
 ##            return False
 
                         
-        return False
+##        return False
             
 
     
